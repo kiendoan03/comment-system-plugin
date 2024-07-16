@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
+import moment from 'moment-timezone';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default {
@@ -125,7 +126,8 @@ export default {
       }
     },
     formatDate(dateString) {
-      return format(new Date(dateString), 'PPpp');
+      return moment.utc(dateString).tz('Asia/Ho_Chi_Minh').format('MMMM D, YYYY h:mm A');
+      // return format(new Date(dateString), 'PPpp');
     },
     formatContent(content) {
       return content.replace(/\n/g, '<br>');
