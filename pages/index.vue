@@ -9,7 +9,7 @@ export default {
     return {
       postId: '1',
       authorName: 'John Doe',
-      authorImage: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'
+      authorImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjS_NU2XdsQGXCKNNZAL7beU5NNCvh1UMk7Q&s'
     };
   },
 }

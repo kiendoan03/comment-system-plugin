@@ -23,7 +23,7 @@
       </div>
     </div>
     <form @submit.prevent="addComment" class="mb-4 d-flex align-items-center">
-      <img :src="authorImage" alt="Avatar" class="avatar">
+      <img :src="authorImage" alt="Avatar" class="avatar mx-2">
       <div class="input-group">
         <textarea v-model="newComment.content" ref="CommentTextarea" placeholder="Your comment" required class="form-control" style="border-radius: 20px;"  @keydown="handleKeydown" @input="autoResize"></textarea>
         <div class="input-group-append">
