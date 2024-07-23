@@ -28,7 +28,7 @@ export default {
     ],
 
     axios: {
-        baseURL: 'https://localhost:7031'
+        // baseURL: 'https://localhost:7031'
     },
 
     // Auto import components: https://go.nuxtjs.dev/config-components

@@ -1,15 +1,16 @@
 <template>
-  <div class="comments container mt-5">
-    <h2>Comments</h2>
-    <div ref="commentsContainer" class="card mb-3 overflow-auto p-2" v-show="comments.length > 0" style="max-height: 400px;">
+  <div class="comments card pt-3" :style="'max-width: ' + width + 'px'">
+    <!-- <h2>Comments</h2> -->
+    <div ref="commentsContainer" class="mb-3 overflow-auto p-2 custom-scroll" v-show="comments.length > 0" :style="'max-height : ' + height + 'px'">
       <div v-for="comment in comments" :key="comment.id">
         <div class="card-body p-2">
           <div class="comment-header">
             <img :src="comment.authorImage" alt="Avatar" class="avatar">
             <div class="comment-details">
-              <div class="card p-2" style="border-radius: 10px;">
-                <p class="mb-1"><strong>{{ comment.authorName }}</strong></p>
-                <div class="mb-1" :class="{ 'truncate': !comment.showFullContent }" v-html="formatContent(comment.content)" style="max-width: 300px;"></div>
+              <div class="card p-2" style="border-radius: 20px;">
+                <p class="mb-0"><strong>{{ comment.authorName }}</strong></p>
+                <div class="mb-0" :class="{ 'truncate': !comment.showFullContent }" v-html="formatContent(comment.content)" :style="'max-width:' + (parseInt(width) - 140) + 'px'">
+                </div>
                 <b v-if="checkTruncate(comment) || comment.content.length > 100" class="text-dark" style="cursor: pointer;" @click.prevent="toggleContent(comment)">
                   {{ comment.showFullContent ? 'Ẩn bớt' : 'Xem thêm' }}
                 </b>
@@ -25,7 +26,7 @@
     <form @submit.prevent="addComment" class="mb-4 d-flex align-items-center">
       <img :src="authorImage" alt="Avatar" class="avatar mx-2">
       <div class="input-group">
-        <textarea v-model="newComment.content" ref="CommentTextarea" placeholder="Your comment" required class="form-control" style="border-radius: 20px;"  @keydown="handleKeydown" @input="autoResize"></textarea>
+        <textarea v-model="newComment.content" ref="CommentTextarea" :placeholder="placeholder" required class="form-control" style="border-radius: 20px;"  @keydown="handleKeydown" @input="autoResize"></textarea>
         <div class="input-group-append">
           <button type="submit" class="btn">
             <i class="fa-solid fa-paper-plane lg"></i>
@@ -39,33 +40,50 @@
 <script>
 // import { format } from 'date-fns';
 import moment from 'moment-timezone';
+import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default {
   name: 'CommentPlugin',
+  props: {
+    postId: {
+      type: String,
+      required: true,
+    },
+    authorName: {
+      type: String,
+      required: true,
+    },
+    authorImage: {
+      type: String,
+      required: true,
+    },
+    height:{
+      type: String,
+      default: '500',
+    },
+    width:{
+      type: String,
+      default: '800',
+    },
+    placeholder: {
+      type: String,
+      default: 'Viết bình luận...',
+    },
+  },
   data() {
     return {
       comments: [],
       newComment: {
-        authorName: this.authorName,
-        authorImage: this.authorImage,
+        authorName: '',
+        authorImage: '',
         content: ''
       },
     };
   },
-  props: {
-    postId: {
-      type: String,
-      required: true
-    },
-    authorName: {
-      type: String,
-      required: true
-    },
-    authorImage: {
-      type: String,
-      required: true
-    }
+  mounted() {
+    this.newComment.authorName = this.authorName;
+    this.newComment.authorImage = this.authorImage;
   },
   async created() {
     await this.fetchComments();
@@ -82,7 +100,7 @@ export default {
     },
     async fetchComments() {
       try {
-        const response = await this.$axios.get(`/api/Comments/${this.postId}`);
+        const response = await axios.get(`https://localhost:7031/api/Comments/${this.postId}`);
         this.comments = response.data;
         this.comments.forEach(comment => {
           this.$set(comment, 'showFullContent', false); 
@@ -109,7 +127,7 @@ export default {
         return;
       }
       try {
-        const response = await this.$axios.post('/api/Comments', {
+        const response = await axios.post('https://localhost:7031/api/Comments', {
           ...this.newComment,
           postId: this.postId
         });
@@ -127,7 +145,6 @@ export default {
     },
     formatDate(dateString) {
       return moment.utc(dateString).tz('Asia/Ho_Chi_Minh').format('MMMM D, YYYY h:mm A');
-      // return format(new Date(dateString), 'PPpp');
     },
     formatContent(content) {
       return content.replace(/\n/g, '<br>');
@@ -162,12 +179,11 @@ textarea.form-control {
   resize: none; 
 }
 .comments {
-  max-width: 600px;
-  margin: 0 auto;
+  border-radius: 20px;
 }
 .truncate {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Number of lines to show */
+  -webkit-line-clamp: 3; 
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -228,5 +244,33 @@ h2 {
 .input-group-append .btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.custom-scroll {
+  overflow-y: auto;
+  margin: 0 5px;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 10px; 
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #919191; 
+  border-radius: 10px; 
+  height: 100px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #616161; 
+}
+
+.custom-scroll::-webkit-scrollbar-track:hover {
+  background: #f1f1f1; ; 
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent; 
+  border-radius: 10px; 
 }
 </style>
