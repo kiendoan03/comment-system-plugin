@@ -1,8 +1,10 @@
 import CommentPlugin from '../components/CommentPlugin.vue';
+import Vuelidate from 'vuelidate';
 
 const Plugin = {
     install(Vue) {
         Vue.component('CommentPlugin', CommentPlugin);
+        Vue.use(Vuelidate);
     }
 };
 

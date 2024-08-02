@@ -1,21 +1,55 @@
 <template>
-  <div class="mt-5">
-    <!-- <comment-plugin :postId="postId" :authorName="authorName" :authorImage="authorImage"></comment-plugin> -->
-    <!-- <comment-plugin :post-id="postId" :author-name="authorName" :author-image="authorImage"></comment-plugin> -->
-    <!-- <comment-plugin post-id="123" author-name="John Doe" author-image="/path/to/image.jpg"></comment-plugin> -->
-    <CommentPlugin class="mx-auto" :postId="postId" :authorName="authorName" :authorImage="authorImage" placeholder="Your comment..." width= "900" height= "500" />
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'IndexPage',
-  data() {
-    return {
-      postId: '1',
-      authorName: 'John Doe',
-      authorImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjS_NU2XdsQGXCKNNZAL7beU5NNCvh1UMk7Q&s'
-    };
-  },
-};
-</script>
+    <div id="app">
+      <CommentPlugin :scroll="true" :title="true" 
+        :objectId="objectId" 
+        :objectTitle = "objectTitle" 
+        :objectType = "objectType"
+        @login="login"
+        :isLogin="isLogin"
+        :senderFullName="senderFullName"
+        :senderEmail="senderEmail"
+        :senderPhoneNumber="senderPhoneNumber"
+        />
+    </div>
+  </template>
+  
+  <script>
+  export default {
+   name: 'Comment',
+   data() {
+     return {
+      // objectId: this.$route.query.objectId,
+      objectId: 1,
+      objectType: 1,
+      objectTitle: 'Bài viết',
+      objectUrl: window.location.href,
+      isLogin: false,
+      senderFullName: 'Adam Smith',
+      senderEmail: 'adam@gmail.com',
+      senderPhoneNumber: '0895619821'
+     }
+   },
+   created() {
+    // let cookie = this.$route.query.cookie;
+    // console.log('ádasd',cookie);
+   },
+   methods: {
+    login() {
+      console.log('login');
+      this.isLogin = true;
+      this.senderFullName = 'John Doe';
+      this.senderEmail = 'john@gmail.com';
+      this.senderPhoneNumber = '0987654345';
+    }
+   }
+  };
+  </script>
+  
+  <style>
+  #app {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  </style>
+  

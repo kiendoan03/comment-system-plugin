@@ -8,7 +8,6 @@ import polyfillNode from 'rollup-plugin-polyfill-node';
 
 export default {
     input: 'plugins/comment-system-plugin-vue.js',
-    // input: 'plugins/comment-system-plugin-other.js',
     output: {
         file: 'dist/comment-system-plugin.umd.js',
         format: 'umd',
@@ -16,10 +15,9 @@ export default {
         exports: 'named',
         globals: {
             vue: 'Vue',
-            '@fontawesome/fontawesome-free': 'FontAwesome',
         }
     },
-    external: ['vue', '@fontawesome/fontawesome-free'],
+    external: ['vue'],
     plugins: [
         resolve({
             extensions: ['.js', '.vue'],
